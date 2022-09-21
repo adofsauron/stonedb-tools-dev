@@ -10,7 +10,7 @@ git add .
 
 git commit -m "fix stonedb tools dev"
 
-git push -u origin master
+git push -u origin main
 
 pause
 
