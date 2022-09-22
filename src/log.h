@@ -5,7 +5,7 @@
 
 #define LOG(level, msg) \
 do { \
-    std::cout << __FILE__ << ":" << __LINE__ << ":" << __FUNCTION__ << " " << level << " " << msg << std::endl; \
+    std::cout << __FILE__ << ":" << __LINE__ << ":" << __FUNCTION__ << "\t" << level << " " << msg << std::endl; \
 } while (0);
 
 #define LOG_INFO(msg) \
