@@ -20,7 +20,6 @@ bool parse_ver(const char* file_path)
     LOG_INFO("hdr.numOfPacks = " << hdr.numOfPacks);
     LOG_INFO("hdr.numOfDeleted = " << hdr.numOfDeleted);
 
-
     LOG_INFO("hdr.auto_inc_next = " << hdr.auto_inc_next);
     LOG_INFO("hdr.min = " << hdr.min);
     LOG_INFO("hdr.max = " << hdr.max);
@@ -34,9 +33,9 @@ bool parse_ver(const char* file_path)
         return true;
     }
 
-    // auto arr = std::make_unique<tianmu::common::PACK_INDEX[]>(hdr.numOfPacks);
-    // fv.ReadExact(arr.get(), hdr.numOfPacks * sizeof(tianmu::common::PACK_INDEX));
-    // auto end = arr.get() + hdr.numOfPacks;
+    auto arr = std::make_unique<tianmu::common::PACK_INDEX[]>(hdr.numOfPacks);
+    fv.ReadExact(arr.get(), hdr.numOfPacks * sizeof(tianmu::common::PACK_INDEX));
+    auto end = arr.get() + hdr.numOfPacks;
 
     // for (int i = 0; i < hdr.numOfPacks; i++)
     // {
