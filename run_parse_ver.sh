@@ -1,8 +1,10 @@
 #!/bin/bash
 
-echo ./stonedb-tools ver ./data/v/632acfff00002714
+XID=`ls ./data/v`
+
+echo ./stonedb-tools ver ./data/v/$XID
 
 echo -e "\n"
 
-./stonedb-tools ver ./data/v/632acfff00002714
+./stonedb-tools ver ./data/v/$XID
 

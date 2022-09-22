@@ -13,7 +13,8 @@ enum FileType {
 #define FILE_TYPE_DPN       "dpn"
 #define FILE_TYPE_COLUMN    "column"
 
-#define COLUMN_FILE_NUM_LIMIT 4
+#define COLUMN_FILE_NUM_LIMIT   4
+#define DPN_ONE_ARGS_NUM_LIMIT  2
 
 #endif  //!__BASE__H__
 

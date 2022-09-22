@@ -20,7 +20,7 @@ bool parser_column(const char* file_path)
 
     if (COLUMN_FILE_NUM_LIMIT > file_num)
     {
-        LOG_ERR("file_num must >= s4, but " << file_num);
+        LOG_ERR("file_num must >= " << COLUMN_FILE_NUM_LIMIT << ", but " << file_num);
         return false;
     }
 
@@ -47,7 +47,7 @@ bool parser_column(const char* file_path)
     }
 
     std::unique_ptr<Tianmu::core::DPN[]> dpn_total;
-    bool ret = parser_dpn(file_dpn.c_str(), dpn_total, hdr_total.hdr.numOfPacks);
+    bool ret = parser_dpn_total(file_dpn.c_str(), dpn_total, hdr_total.hdr.numOfPacks);
     if (!ret)
     {
         return false;
