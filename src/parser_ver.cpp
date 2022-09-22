@@ -4,53 +4,50 @@
 #include "tianmu/tianmu_file.h"
 #include "tianmu/file_layout.h"
 #include "tianmu/defs.h"
+#include "tianmu/dpn.h"
 
-bool parse_ver(const char* file_path)
+#include <memory>
+
+bool parser_ver(const char* file_path, Tianmu::COL_VER_HDR_TOTAL* hdr_total)
 {
     LOG_INFO("file_path = " << file_path);
 
-    Tianmu::COL_VER_HDR hdr{};
     Tianmu::system::TianmuFile fv;
 
     fv.OpenReadOnly(file_path);
-    fv.ReadExact(&hdr, sizeof(hdr));
+    fv.ReadExact(&hdr_total->hdr, sizeof(hdr_total->hdr));
 
-    LOG_INFO("hdr.numOfRecords = " << hdr.numOfRecords);
-    LOG_INFO("hdr.numOfNulls = " << hdr.numOfNulls);
-    LOG_INFO("hdr.numOfPacks = " << hdr.numOfPacks);
-    LOG_INFO("hdr.numOfDeleted = " << hdr.numOfDeleted);
-
-    LOG_INFO("hdr.auto_inc_next = " << hdr.auto_inc_next);
-    LOG_INFO("hdr.min = " << hdr.min);
-    LOG_INFO("hdr.max = " << hdr.max);
-    LOG_INFO("hdr.dict_ver = " << hdr.dict_ver);
-    LOG_INFO("hdr.unique = " << hdr.unique);
-    LOG_INFO("hdr.unique_updated = " << hdr.unique_updated);
-    LOG_INFO("hdr.natural_size = " << hdr.natural_size);
-    LOG_INFO("hdr.compressed_size = " << hdr.compressed_size);
-
-    if (hdr.numOfPacks == 0) {
+    if (hdr_total->hdr.numOfPacks == 0) {
         return true;
     }
 
-    auto arr = std::make_unique<tianmu::common::PACK_INDEX[]>(hdr.numOfPacks);
-    fv.ReadExact(arr.get(), hdr.numOfPacks * sizeof(tianmu::common::PACK_INDEX));
-    auto end = arr.get() + hdr.numOfPacks;
-
-    // for (int i = 0; i < hdr.numOfPacks; i++)
-    // {
-    //     auto found = std::find(arr.get(), end, i);
-    //     if (found == end) 
-    //     {
-    //         LOG_INFO("arr over");
-    //     }
-    //     else
-    //     {
-    //         LOG_INFO("arr i: " << i);
-    //     }
-        
-    // }
+    hdr_total->arr = std::make_unique<Tianmu::common::PACK_INDEX[]>(hdr_total->hdr.numOfPacks);
+    fv.ReadExact(hdr_total->arr.get(), hdr_total->hdr.numOfPacks * sizeof(Tianmu::common::PACK_INDEX));
     
-
     return true;
+}
+
+void parser_ver_print(Tianmu::COL_VER_HDR_TOTAL* hdr_total)
+{
+    LOG_INFO("hdr_total->hdr.numOfRecords = " << hdr_total->hdr.numOfRecords);
+    LOG_INFO("hdr_total->hdr.numOfNulls = " << hdr_total->hdr.numOfNulls);
+    LOG_INFO("hdr_total->hdr.numOfPacks = " << hdr_total->hdr.numOfPacks);
+    LOG_INFO("hdr_total->hdr.numOfDeleted = " << hdr_total->hdr.numOfDeleted);
+
+    LOG_INFO("hdr_total->hdr.auto_inc_next = " << hdr_total->hdr.auto_inc_next);
+    LOG_INFO("hdr_total->hdr.min = " << hdr_total->hdr.min);
+    LOG_INFO("hdr_total->hdr.max = " << hdr_total->hdr.max);
+    LOG_INFO("hdr_total->hdr.dict_ver = " << hdr_total->hdr.dict_ver);
+    LOG_INFO("hdr_total->hdr.unique = " << hdr_total->hdr.unique);
+    LOG_INFO("hdr_total->hdr.unique_updated = " << hdr_total->hdr.unique_updated);
+    LOG_INFO("hdr_total->hdr.natural_size = " << hdr_total->hdr.natural_size);
+    LOG_INFO("hdr_total->hdr.compressed_size = " << hdr_total->hdr.compressed_size);
+
+    auto end = hdr_total->arr.get() + hdr_total->hdr.numOfPacks;
+
+    for (int i = 0; i < hdr_total->hdr.numOfPacks; i++)
+    {
+        Tianmu::common::PACK_INDEX index = hdr_total->arr[i];
+        LOG_INFO("arr i: " << i << ", PACK_INDEX: " << index);
+    }
 }

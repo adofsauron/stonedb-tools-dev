@@ -9,6 +9,11 @@ enum FileType {
 };
 
 
-#define FILE_TYPE_VER "ver"
+#define FILE_TYPE_VER       "ver"
+#define FILE_TYPE_DPN       "dpn"
+#define FILE_TYPE_COLUMN    "column"
+
+#define COLUMN_FILE_NUM_LIMIT 4
 
 #endif  //!__BASE__H__
+

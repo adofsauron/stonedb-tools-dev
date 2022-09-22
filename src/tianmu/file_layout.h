@@ -1,8 +1,10 @@
 #ifndef __FILE_FORMAT__H__
 #define __FILE_FORMAT__H__
 
-#include <list>
 #include "defs.h"
+
+#include <list>
+#include <memory>
 
 namespace Tianmu {
 
@@ -34,6 +36,11 @@ struct alignas(128) COL_VER_HDR_V3 {
 };
 
 using COL_VER_HDR = COL_VER_HDR_V3;
+
+struct COL_VER_HDR_TOTAL {
+  COL_VER_HDR hdr;
+  std::unique_ptr<Tianmu::common::PACK_INDEX[]> arr;
+};
 
 }
 

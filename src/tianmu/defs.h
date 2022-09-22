@@ -1,24 +1,10 @@
-/* Copyright (c) 2022 StoneAtom, Inc. All rights reserved.
-   Use is subject to license terms
-
-   This program is free software; you can redistribute it and/or modify
-   it under the terms of the GNU General Public License as published by
-   the Free Software Foundation; version 2 of the License.
-
-   This program is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-   GNU General Public License for more details.
-
-   You should have received a copy of the GNU General Public License
-   along with this program; if not, write to the Free Software
-   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1335 USA
-*/
 #ifndef TIANMU_COMMON_DEFS_H_
 #define TIANMU_COMMON_DEFS_H_
 #pragma once
 
 #include <cstdint>
+#include <string>
+#include <stddef.h>
 
 namespace Tianmu {
 namespace common {
@@ -55,6 +41,22 @@ enum class CT : unsigned char {
   BIGINT,
   LONGTEXT,
   UNK = 255
+};
+
+// Transaction ID is unique for each transaction and grows monotonically.
+struct TX_ID final {
+  union {
+    uint64_t v;
+    struct {
+      uint32_t v1;
+      uint32_t v2;
+    };
+  };
+
+  TX_ID(uint64_t v = UINT64_MAX) : v(v) {}
+  TX_ID(uint32_t v1, uint32_t v2) : v1(v1), v2(v2) {}
+  std::string ToString() const;
+  bool operator<(const TX_ID &rhs) const { return v < rhs.v; }
 };
 
 // pack data format, stored on disk so only append new ones at the end.

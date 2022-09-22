@@ -16,10 +16,10 @@ int	main(int argc, char **argv)
     LOG_INFO("file_type = " << file_type);
     LOG_INFO("file_path = " << file_path);
 
-    bool ret = parse_file(file_type, file_path);
+    bool ret = parser_file(file_type, file_path);
     const char* ret_str = ret ? "true" : "false";
 
-    LOG_INFO("parse_file ret = " << ret_str);
+    LOG_INFO("parser_file ret = " << ret_str);
 
     return 0;
 }

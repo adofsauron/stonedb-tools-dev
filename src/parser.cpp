@@ -1,12 +1,15 @@
-#include "parser.h"
-#include "parser_ver.h"
 #include "base.h"
 #include "log.h"
 #include "tools.h"
+#include "parser.h"
+#include "parser_ver.h"
+#include "parser_dpn.h"
+#include "parser_column.h"
+#include "tianmu/dpn.h"
 
 #include <string>
 
-bool parse_file(const char* file_type, const char* file_path)
+bool parser_file(const char* file_type, const char* file_path)
 {
     LOG_INFO("file_type = " << file_type);
     LOG_INFO("file_path = " << file_path);
@@ -17,9 +20,26 @@ bool parse_file(const char* file_type, const char* file_path)
         return false;
     }
 
-    if (FILE_TYPE_VER == std::string(file_type))
+    std::string type_str = file_type;
+
+    if (FILE_TYPE_COLUMN == type_str)
     {
-        return parse_ver(file_path);
+        bool ret = parser_column(file_path);
+        return ret;
+    }
+
+    if (FILE_TYPE_VER == type_str)
+    {
+        Tianmu::COL_VER_HDR_TOTAL hdr_total;
+        bool ret = parser_ver(file_path, &hdr_total);
+        if (!ret)
+        {
+            return false;
+        }
+
+        parser_ver_print(&hdr_total);
+
+        return true;
     }
 
     return true;
